@@ -18,33 +18,43 @@
 	</properties>
 
 	<build>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-clean-plugin</artifactId>
-			<version>3.2.0</version>
-		</plugin>
-		<plugin>
-			<groupId>org.mule.tools.maven</groupId>
-			<artifactId>mule-maven-plugin</artifactId>
-			<version>${mule.maven.plugin.version}</version>
-			<extensions>true</extensions>
-			<configuration>
-				<classifier>mule-application</classifier>
-				<cloudHubDeployment>
-					<uri>https://anypoint.mulesoft.com</uri>
-					<muleVersion>${app.runtime}</muleVersion>
-				    <username>${anypoint.username}</username>
-				    <password>${anypoint.password}</password>
-					<applicationName>azure-pipeline-app</applicationName>
-					<businessGroupId>${businessGroupId}</businessGroupId>
-					<environment>${environment}</environment>
-					<workers>${workers}</workers>
-					<workerType>${workerType}</workerType>
-				</cloudHubDeployment>
-			</configuration>
-		</plugin>
-	</plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-maven-plugin</artifactId>
+				<version>${mule.maven.plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<muleVersion>${app.runtime}</muleVersion>
+						<username>${anypoint.username}</username>
+						<password>${anypoint.password}</password>
+						<applicationName>azure-pipeline-app</applicationName>
+						<businessGroupId>${businessGroupId}</businessGroupId>
+						<environment>${environment}</environment>
+						<workers>${workers}</workers>
+						<workerType>${workerType}</workerType>
+					</cloudHubDeployment>
+					<executions>
+						<execution>
+							<id>deploy</id>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+							<configuration>
+								<classifier>mule-application</classifier>
+							</configuration>
+						</execution>
+					</executions>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>
