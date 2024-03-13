@@ -7,10 +7,6 @@ trigger:
   branches:
     include:
       - develop
-  paths:
-    exclude:
-      - azure-pipelines.yml
-    
 
 pool:
   vmImage: ubuntu-latest
