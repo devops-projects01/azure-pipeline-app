@@ -55,4 +55,4 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: true
     sonarQubeRunAnalysis: false
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -DconnectedAppClientId=$(clientId) -DconnectedAppClientSecret=$(clientSecret) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
