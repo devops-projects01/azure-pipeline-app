@@ -26,7 +26,7 @@ steps:
     path: $(MAVEN_CACHE_FOLDER)
   
 - task: DownloadSecureFile@1
-  name: "settingsxml"
+  name: "mulesoftSettingsFile"
   inputs:
     secureFile: 'settings.xml'
 
@@ -35,7 +35,7 @@ steps:
     targetType: 'inline'
     script: |
       New-Item -Type Directory -Force "${HOME}/.m2"
-      Copy-Item -Force "$(settingsxml.securedFilePath)" "${HOME}/.m2/settings.xml"
+      Copy-Item -Force "$(mulesoftSettingsFile.secureFilePath)" "${HOME}/.m2/settings.xml"
 
 - task: Maven@3
   displayName: Build
