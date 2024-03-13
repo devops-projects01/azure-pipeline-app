@@ -11,7 +11,20 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: Build-Variable-Group
+- name: MAVEN_CACHE_FOLDER
+  value: $(Pipeline.workspace)/.m2/respository
+- name: MAVEN_OPTS
+  value: -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)
+
 steps:
+- task: CacheBeta@0
+  displayName: Cache maven local repo
+  inputs:
+    key: $(Build.SourcesDirectory)/pom.xml
+    path: $(MAVEN_CACHE_FOLDER)
+  
 - task: DownloadSecureFile@1
   name: "settingsxml"
   inputs:
