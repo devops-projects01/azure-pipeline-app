@@ -34,19 +34,17 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
+    publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    goals: 'clean package -DskipTests'
 - task: Maven@4
   displayName: Deploy
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'deploy'
-    options: '-DskipTests -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    publishJUnitResults: false
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
-    effectivePomSkip: false
+    effectivePomSkip: true
     sonarQubeRunAnalysis: false
