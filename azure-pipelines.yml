@@ -7,6 +7,10 @@ trigger:
   branches:
     include:
       - develop
+  paths:
+    exclude:
+      - azure-pipelines.yml
+    
 
 pool:
   vmImage: ubuntu-latest
@@ -32,27 +36,17 @@ steps:
       New-Item -Type Directory -Force "${HOME}/.m2"
       Copy-Item -Force "$(mulesoftSettingsFile.secureFilePath)" "${HOME}/.m2/settings.xml"
 
-
-- task: Maven@3
-  displayName: Build
+- task: Maven@4
+  displayName: Build and Deploy
   inputs:
-    options: -DskipTests
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
+    publishJUnitResults: false
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: false
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
-- task: Maven@4
-  displayName: Deploy
-  inputs:
-    mavenPomFile: 'pom.xml'    
-    publishJUnitResults: false
-    javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
     effectivePomSkip: true
     sonarQubeRunAnalysis: false
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -DconnectedAppClientId=$(clientId) -DconnectedAppClientSecret=$(clientSecret) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    goals: 'clean package deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
