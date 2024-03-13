@@ -11,6 +11,13 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - group: Build-Variable-Group
+  - name: MAVEN_CACHE_FOLDER
+    value: $(Pipeline.workspace)/.m2/repository
+  - name: MAVEN_OPTS
+    value: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+
 steps:
 - task: DownloadSecureFile@1
   name: 'mulesoftSettingsFile'
@@ -29,6 +36,7 @@ steps:
 - task: Maven@3
   displayName: Build
   inputs:
+    options: -DskipTests
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
@@ -36,15 +44,15 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'clean package -DskipTests'
+    goals: 'package'
 - task: Maven@4
   displayName: Deploy
   inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    mavenPomFile: 'pom.xml'    
     publishJUnitResults: false
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
     effectivePomSkip: true
     sonarQubeRunAnalysis: false
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
