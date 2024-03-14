@@ -32,11 +32,22 @@ steps:
       New-Item -Type Directory -Force "${HOME}/.m2"
       Copy-Item -Force "$(mulesoftSettingsFile.secureFilePath)" "${HOME}/.m2/settings.xml"
 
-- task: Maven@4
-  displayName: Build and Deploy
+- task: Maven@3
+  displayName: Build
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: false
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'clean package install'
+
+- task: Maven@4
+  displayName: Deploy
+  inputs:
+    mavenPomFile: 'pom.xml'
     publishJUnitResults: false
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
@@ -45,4 +56,4 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: true
     sonarQubeRunAnalysis: false
-    goals: 'clean package install deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(anypoint.username) -Danypoint.password=$(anypoint.password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(anypoint.username) -Danypoint.password=$(anypoint.password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
