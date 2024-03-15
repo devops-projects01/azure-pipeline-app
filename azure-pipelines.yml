@@ -33,15 +33,14 @@ steps:
       Copy-Item -Force "$(mulesoftSettingsFile.secureFilePath)" "${HOME}/.m2/settings.xml"
 
 - task: Maven@4
-  displayName: Deploy
   inputs:
     mavenPomFile: 'pom.xml'
-    publishJUnitResults: false
+    goals: 'deploy'
+    options: '$(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
-    effectivePomSkip: true
+    effectivePomSkip: false
     sonarQubeRunAnalysis: false
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(anypoint.username) -Danypoint.password=$(anypoint.password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
