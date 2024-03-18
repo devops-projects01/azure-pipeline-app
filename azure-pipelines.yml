@@ -25,18 +25,6 @@ steps:
       New-Item -Type Directory -Force "${HOME}/.m2"
       Copy-Item -Force "$(mulesoftSettingsFile.secureFilePath)" "${HOME}/.m2/settings.xml"
 
-
-- task: Maven@3
-  displayName: Build
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: false
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'clean package -DskipTests'
 - task: Maven@4
   displayName: Deploy
   inputs:
