@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
-"Welcome to azure devops pipeline!!!"]]></ee:set-payload>
+"Welcome to the world azure devops pipeline!!!"]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>
