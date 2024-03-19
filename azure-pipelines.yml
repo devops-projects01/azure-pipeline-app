@@ -41,16 +41,18 @@ steps:
     path: '$(MAVEN_CACHE_FOLDER)'
 
 - task: Maven@4
+  displayName: Deploy
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(username) -Danypoint.password=$(password) -Denvironment=$(environment) -DappName=$(appName) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
     publishJUnitResults: false
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
-    effectivePomSkip: false
+    effectivePomSkip: true
     sonarQubeRunAnalysis: false
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(anypoint.username) -Danypoint.password=$(anypoint.password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
 
 - task: PublishPipelineArtifact@1
   inputs:
