@@ -45,17 +45,6 @@
 						<workers>${workers}</workers>
 						<workerType>${workerType}</workerType>
 					</cloudHubDeployment>
-					<executions>
-						<execution>
-							<id>deploy</id>
-							<goals>
-								<goal>deploy</goal>
-							</goals>
-							<configuration>
-								<classifier>mule-application</classifier>
-							</configuration>
-						</execution>
-					</executions>
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
