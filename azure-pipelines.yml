@@ -52,7 +52,7 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: true
     sonarQubeRunAnalysis: false
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(anypoint.username) -Danypoint.password=$(anypoint.password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.connectedAppClientId=$(anypoint.connectedAppClientId) -Danypoint.connectedAppClientSecret=$(anypoint.connectedAppClientSecret) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
 
 - task: PublishPipelineArtifact@1
   inputs:
