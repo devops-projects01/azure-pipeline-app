@@ -4,13 +4,18 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
+  #batch: false, batch = false by default, meaning, builds on each commit, if true does an aggregate build.
   branches:
     include:
       - develop
+  paths:
+    exclude:
+      - azure-pipelines.yml
 
 pool:
   vmImage: ubuntu-latest
 
+#Global variables to provide the maven repo path and map settins.xml file. 
 variables:
   - group: Build-Variable-Group
   - name: MAVEN_CACHE_FOLDER
@@ -19,12 +24,17 @@ variables:
     value: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
 
 steps:
+#Download task used to download the settings.xml file. 
 - task: DownloadSecureFile@1
   name: 'mulesoftSettingsFile'
   inputs:
     secureFile: 'settings.xml'
     retryCount: '5'
 
+#PowerShell task to create .m2 repo and copy the uploaded settings.xml file.
+#If you don't want to copy settings file to .m2, and use it dynamically,
+#you can skip this step, but add "mulesoftSettingsFile.secureFilePath" as option
+#in the deploy or any other maven command were you need the settings.xml file
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
@@ -32,6 +42,7 @@ steps:
       New-Item -Type Directory -Force "${HOME}/.m2"
       Copy-Item -Force "$(mulesoftSettingsFile.secureFilePath)" "${HOME}/.m2/settings.xml"
 
+#cache task to use existing local maven repo for the Deploy task. 
 - task: Cache@2
   inputs:
     key: 'maven | "$(Agent.OS)" | **/pom.xml'
@@ -40,6 +51,8 @@ steps:
       maven
     path: '$(MAVEN_CACHE_FOLDER)'
 
+#The task to package, install and deploy the code anypoint platform.
+# Here MAVEN_OPTS is used to use local maven repository for build
 - task: Maven@4
   displayName: Deploy
   inputs:
@@ -52,10 +65,4 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: true
     sonarQubeRunAnalysis: false
-    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.username=$(anypoint.username) -Danypoint.password=$(anypoint.password) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
-
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifact: 'azure-pipeline-app'
-    publishLocation: 'pipeline'
+    goals: 'deploy $(MAVEN_OPTS) -DmuleDeploy -Danypoint.connectedAppClientId=$(anypoint.connectedAppClientId) -Danypoint.connectedAppClientSecret=$(anypoint.connectedAppClientSecret) -Denvironment=$(environment) -Dapp.runtime=$(app.runtime) -DbusinessGroupId=$(businessGroupId)'
