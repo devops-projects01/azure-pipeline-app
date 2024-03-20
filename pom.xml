@@ -36,8 +36,8 @@
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<muleVersion>${app.runtime}</muleVersion>
-						<connectedAppClientId>82c378c1a1fe4d7bb3c321226381be17</connectedAppClientId>
-						<connectedAppClientSecret>a86c4e779664460B9EC67d9638F893e2</connectedAppClientSecret>
+						<connectedAppClientId>${anypoint.connectedAppClientId}</connectedAppClientId>
+						<connectedAppClientSecret>${anypoint.connectedAppClientSecret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
 						<applicationName>azure-pipeline-app</applicationName>
 						<businessGroupId>${businessGroupId}</businessGroupId>
